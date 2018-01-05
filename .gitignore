@@ -99,3 +99,14 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+
+policies/
+results/
+attributes.json
+encounters.json
+encounters35kb.json
+image.jpg
+sample1.py
+sample2.py
+users.json
