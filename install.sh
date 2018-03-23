@@ -32,7 +32,6 @@ make install
 ldconfig
 
 # Install OpenSSL
-
 cd ..
 tar -xvf openssl-1.1.0g.tar.gz
 cd openssl-1.1.0g
