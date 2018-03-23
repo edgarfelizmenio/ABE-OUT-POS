@@ -1,0 +1,18 @@
+version: '3'
+
+volumes:
+  experiment-data:
+    driver: local-persist
+    driver_opts:
+      mountpoint: /home/faculty/CS300-Data
+
+services:
+  
+  abe-out-pos:
+    # restart: always
+    build: .
+    image: abe-out-pos
+    volumes:
+      - experiment-data:/code/data
+    network_mode: host
+    entrypoint: /bin/bash
