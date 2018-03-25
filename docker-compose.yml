@@ -4,7 +4,7 @@ volumes:
   experiment-data:
     driver: local-persist
     driver_opts:
-      mountpoint: /home/faculty/CS300-Data
+      mountpoint: /home/faculty/CS300-Data/ABE-out
 
 services:
   

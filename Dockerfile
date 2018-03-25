@@ -17,3 +17,5 @@ RUN pip3 install -r requirements.txt
 RUN pip3 install gunicorn
 
 RUN pip3 freeze
+
+RUN mkdir -p /code/data
