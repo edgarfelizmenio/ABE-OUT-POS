@@ -7,12 +7,11 @@ volumes:
       mountpoint: /home/faculty/CS300-Data/ABE-out
 
 services:
-  
   abe-out-pos:
-    # restart: always
     build: .
     image: abe-out-pos
     volumes:
       - experiment-data:/code/data
     network_mode: host
     entrypoint: /bin/bash
+    tty: true

@@ -18,4 +18,7 @@ RUN pip3 install gunicorn
 
 RUN pip3 freeze
 
+RUN mkdir -p /code/input
 RUN mkdir -p /code/data
+
+ENTRYPOINT [ "/bin/sh" ]
