@@ -15,7 +15,7 @@ groupObj = PairingGroup('SS512')
 cpabe = CPabe_BSW07(groupObj)
 hybrid_abe = HybridABEnc(cpabe, groupObj)
 
-master_key = requests.get('{}/masterkey'.format(il_url),
+master_key = requests.get('{}/masterkey'.format(il_upstream_url),
                           auth=auth).json()
 
 pk = bytesToObject(master_key['pk'].encode('utf-8'), groupObj)
