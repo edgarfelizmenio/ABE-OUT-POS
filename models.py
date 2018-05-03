@@ -14,10 +14,7 @@ import traceback
 
 from app import celery
 
-auth = HTTPBasicAuth('tutorial', 'pass')
-headers = {'Content-Type': 'application/json'}
 
-il_url = 'https://abe-out-il.cs300ohie.net:5000'
 test_data_dir = 'test_data'
 test_users_file_name = os.path.join(test_data_dir, 'users_{}_{}.json')
 test_encounters_file_name = os.path.join(test_data_dir, 'encounters_{}kb.json')
@@ -199,7 +196,7 @@ def save_user(attributes):
         'last_name': attributes[1],
         'attributes': attributes[2:]
     }
-    result = requests.post('{}/user'.format(il_url),
+    result = requests.post('{}/user'.format(il_upstream_url),
                            json=user_object,
                            headers=headers,
                            auth=auth)
@@ -208,7 +205,7 @@ def save_user(attributes):
     return (user_id, private_key, result.status_code)
 
 def get_user_info(user_id):
-    result = requests.get('{}/user/{}'.format(il_url, user_id),
+    result = requests.get('{}/user/{}'.format(il_upstream_url, user_id),
                           headers=headers,
                           auth=auth)
     contents = result.json()
@@ -217,7 +214,7 @@ def get_user_info(user_id):
 def save_encounter(encounter, policy, user_id):
 
     def validate_user():
-        ta_response = requests.get('{}/user/{}'.format(il_url, user_id),
+        ta_response = requests.get('{}/user/{}'.format(il_upstream_url, user_id),
                                    headers=headers,
                                    auth=auth)      
         user_info = ta_response.json()
@@ -225,14 +222,14 @@ def save_encounter(encounter, policy, user_id):
 
     def validate_patient_info():
         patient_id = encounter['patient_id']
-        cr_response = requests.get('{}/patient/{}'.format(il_url, patient_id),
+        cr_response = requests.get('{}/patient/{}'.format(il_upstream_url, patient_id),
                                    headers=headers,
                                    auth=auth)
         cr_contents = cr_response.json()
         return cr_contents
 
     def validate_provider_info(provider_id):
-        hwr_response = requests.get('{}/provider/{}'.format(il_url, provider_id),
+        hwr_response = requests.get('{}/provider/{}'.format(il_upstream_url, provider_id),
                                     headers=headers,
                                     auth=auth)
         hwr_contents = hwr_response.json()
@@ -240,7 +237,7 @@ def save_encounter(encounter, policy, user_id):
 
     def validate_facility_info():
         location_id = encounter['location_id']
-        fr_response = requests.get('{}/location/{}'.format(il_url, location_id),
+        fr_response = requests.get('{}/location/{}'.format(il_upstream_url, location_id),
                                    headers=headers,
                                    auth=auth)
         fr_contents = fr_response.json()
@@ -269,7 +266,7 @@ def save_encounter(encounter, policy, user_id):
     }
 
     # print(len(payload['contents']), len(payload['contents']) < limit)
-    save_response = requests.post('{}/encounters'.format(il_url),
+    save_response = requests.post('{}/encounters'.format(il_upstream_url),
                                   json=payload,
                                   headers=headers,
                                   auth=auth)
@@ -280,7 +277,7 @@ def save_encounter(encounter, policy, user_id):
 
 def get_encounter(encounter_id, secret_key):
 
-    query_response = requests.get('{}/encounters/{}'.format(il_url, encounter_id),
+    query_response = requests.get('{}/encounters/{}'.format(il_upstream_url, encounter_id),
                                   headers=headers,
                                   auth=auth)
     query_contents = query_response.json()
@@ -295,21 +292,21 @@ def get_encounter(encounter_id, secret_key):
         policy = plaintext['policy']
 
         def get_patient_info():
-            cr_response = requests.get('{}/patient/{}'.format(il_url, encounter['patient_id']),
+            cr_response = requests.get('{}/patient/{}'.format(il_upstream_url, encounter['patient_id']),
                                     headers=headers,
                                     auth=auth)
             patient_info = cr_response.json()
             return patient_info
 
         def get_provider_info(provider_id):
-            hwr_response = requests.get('{}/provider/{}'.format(il_url, provider['provider_id']),
+            hwr_response = requests.get('{}/provider/{}'.format(il_upstream_url, provider['provider_id']),
                                         headers=headers,
                                         auth=auth)
             provider_info = hwr_response.json()
             return provider_info
 
         def get_facility_info():
-            fr_response = requests.get('{}/location/{}'.format(il_url, encounter['location_id']), 
+            fr_response = requests.get('{}/location/{}'.format(il_upstream_url, encounter['location_id']), 
                                     headers=headers,
                                     auth=auth)
             location_info = fr_response.json()
