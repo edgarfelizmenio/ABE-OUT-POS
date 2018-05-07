@@ -9,4 +9,6 @@ RUN pip3 freeze
 RUN mkdir -p /code/input
 RUN mkdir -p /code/data
 
+RUN python3 get_master_key.py
+
 ENTRYPOINT [ "/bin/sh" ]
