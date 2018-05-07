@@ -7,6 +7,7 @@ import datetime
 import warnings
 import random
 import concurrent.futures
+import traceback
 
 import logging
 
@@ -47,7 +48,7 @@ def get_encounter(encounter_id, secret_key):
             return patient_info
 
         def get_provider_info(provider_id):
-            hwr_response = requests.get('{}/provider/{}'.format(il_upstream_url, provider['provider_id']),
+            hwr_response = requests.get('{}/provider/{}'.format(il_upstream_url, provider_id),
                                         headers=headers,
                                         auth=auth,
                                         verify=False)
