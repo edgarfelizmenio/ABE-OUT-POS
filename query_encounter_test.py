@@ -24,15 +24,18 @@ mk = bytesToObject(master_key['mk'].encode('utf-8'), groupObj)
 
 def get_encounter(encounter_id, secret_key):
 
-    status_code = 500
+    #status_code = 500
     query_response = requests.get('{}/encounters/{}'.format(il_upstream_url, encounter_id),
                                   headers=headers,
                                   auth=auth,
                                   verify=False)
     if query_response.status_code != 200:
+        print('Encounters is None!')
+        print(query_response.status_code)
         return None, None, 500
     status_code = query_response.status_code
     query_contents = query_response.json()
+    # print(query_contents)
     ciphertext = query_contents['contents']
     # print(len(ciphertext), len(ciphertext) < limit)
     ciphertext_obj = bytesToObject(ciphertext.encode('utf-8'), groupObj)
@@ -84,6 +87,7 @@ def get_encounter(encounter_id, secret_key):
             facility_info = facility_future.result()
 
             if patient_info is None or facility_info is None:
+                print("patient is None!")
                 return None, None, 500
 
             encounter['patient_name'] = '{} {}'.format(patient_info['given_name'], patient_info['family_name'])
@@ -95,6 +99,7 @@ def get_encounter(encounter_id, secret_key):
             for i in range(len(encounter['providers'])):
                 provider_info = provider_futures[i].result()
                 if provider_info is None:
+                    print("provider is None!")
                     return None, None, 500
                 provider = encounter['providers'][i]
                 provider['attributes'] = provider_info['attributes']
@@ -104,7 +109,7 @@ def get_encounter(encounter_id, secret_key):
             encounter['location_name'] = facility_info['name']
 
     except Exception as e:
-        # print('failed to get encounter!')
+        print('decryption failed!')
         status_code = 500
         traceback.print_exc()
         encounter = ciphertext
