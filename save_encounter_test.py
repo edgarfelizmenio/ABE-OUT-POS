@@ -29,7 +29,9 @@ def save_encounter(encounter, policy, user_id):
         ta_response = requests.get('{}/user/{}'.format(il_upstream_url, user_id),
                                    headers=headers,
                                    auth=auth,
-                                   verify=False)      
+                                   verify=False)
+        if ta_response.status_code != 200:
+            return None
         user_info = ta_response.json()
         return user_info
 
@@ -39,6 +41,8 @@ def save_encounter(encounter, policy, user_id):
                                    headers=headers,
                                    auth=auth,
                                    verify=False)
+        if cr_response.status_code != 200:
+            return None
         cr_contents = cr_response.json()
         return cr_contents
 
@@ -47,6 +51,8 @@ def save_encounter(encounter, policy, user_id):
                                     headers=headers,
                                     auth=auth,
                                    verify=False)
+        if hwr_response.status_code != 200:
+            return None
         hwr_contents = hwr_response.json()
         return hwr_contents
 
@@ -56,6 +62,8 @@ def save_encounter(encounter, policy, user_id):
                                    headers=headers,
                                    auth=auth,
                                    verify=False)
+        if fr_response.status_code != 200:
+            return None
         fr_contents = fr_response.json()
         return fr_contents
 
@@ -87,6 +95,8 @@ def save_encounter(encounter, policy, user_id):
                                   headers=headers,
                                   auth=auth,
                                   verify=False)
+    if save_response.status_code != 201:
+        return None, save_response.status_code
     # print(save_response.status_code)
     encounter_id = save_response.json()
 
